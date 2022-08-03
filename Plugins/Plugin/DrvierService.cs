@@ -11,23 +11,28 @@ using System.Threading.Tasks;
 using WalkingTec.Mvvm.Core;
 using IoTGateway.DataAccess;
 using IoTGateway.Model;
+using Microsoft.Extensions.Logging;
 
 namespace Plugin
 {
-    public class DrvierService//: IDependency
+    public class DriverService//: IDependency
     {
-        string DriverPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"drivers/net5.0");
+        private readonly ILogger<DriverService> _logger;
+        string DriverPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"drivers/net6.0");
         string[] driverFiles;
         public List<DriverInfo> DriverInfos = new List<DriverInfo>();
-        public DrvierService(IConfiguration ConfigRoot)
+        public DriverService(IConfiguration ConfigRoot, ILogger<DriverService> logger)
         {
+            _logger = logger;
             try
             {
-                driverFiles = Directory.GetFiles(DriverPath).Where(x => Path.GetExtension(x) == ".dll").ToArray();                
+                _logger.LogInformation("LoadDriverFiles Start");
+                driverFiles = Directory.GetFiles(DriverPath).Where(x => Path.GetExtension(x) == ".dll").ToArray();
+                _logger.LogInformation($"LoadDriverFiles End，Count{driverFiles.Count()}");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                _logger.LogError("LoadDriverFiles Error", ex);
             }
             LoadAllDrivers();
         }
@@ -91,6 +96,7 @@ namespace Plugin
                             ID = Guid.NewGuid(),
                             DeviceId = dapID,
                             DeviceConfigName = property.Name,
+                            DataSide= DataSide.AnySide,
                             Description = ((ConfigParameterAttribute)config).Description,
                             Value = property.GetValue(iObj)?.ToString()
                         };
@@ -110,9 +116,10 @@ namespace Plugin
         }
         public void LoadAllDrivers()
         {
-            try
+            _logger.LogInformation("LoadAllDrivers Start");
+            foreach (var file in driverFiles)
             {
-                foreach (var file in driverFiles)
+                try
                 {
                     var dll = Assembly.LoadFrom(file);
                     foreach (var type in dll.GetTypes().Where(x => typeof(IDriver).IsAssignableFrom(x) && x.IsClass))
@@ -123,13 +130,16 @@ namespace Plugin
                             Type = type
                         };
                         DriverInfos.Add(driverInfo);
+                        _logger.LogInformation($"LoadAllDrivers {driverInfo.FileName} OK");
                     }
                 }
-            }
-            catch (Exception)
-            {
+                catch (Exception ex)
+                {
+                    _logger.LogDebug($"LoadAllDrivers Error {ex}");
+                }
 
             }
+            _logger.LogInformation($"LoadAllDrivers End,Count{DriverInfos.Count}");
 
         }
 

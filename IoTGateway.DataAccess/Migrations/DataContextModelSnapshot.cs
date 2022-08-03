@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace IoTGateway.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
@@ -13,8 +15,7 @@ namespace IoTGateway.DataAccess.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
             modelBuilder.Entity("IoTGateway.Model.Device", b =>
                 {
@@ -23,6 +24,9 @@ namespace IoTGateway.DataAccess.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("AutoStart")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("CgUpload")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CreateBy")
@@ -42,6 +46,9 @@ namespace IoTGateway.DataAccess.Migrations
 
                     b.Property<Guid?>("DriverId")
                         .HasColumnType("TEXT");
+
+                    b.Property<uint>("EnforcePeriod")
+                        .HasColumnType("INTEGER");
 
                     b.Property<uint>("Index")
                         .HasColumnType("INTEGER");
@@ -76,6 +83,9 @@ namespace IoTGateway.DataAccess.Migrations
 
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("DataSide")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -124,6 +134,9 @@ namespace IoTGateway.DataAccess.Migrations
                     b.Property<Guid?>("DeviceId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Expressions")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Method")
                         .HasColumnType("TEXT");
 
@@ -132,9 +145,6 @@ namespace IoTGateway.DataAccess.Migrations
 
                     b.Property<int>("ProtectType")
                         .HasColumnType("INTEGER");
-
-                    b.Property<double>("ValueFactor")
-                        .HasColumnType("REAL");
 
                     b.HasKey("ID");
 
@@ -180,6 +190,43 @@ namespace IoTGateway.DataAccess.Migrations
                     b.ToTable("Drivers");
                 });
 
+            modelBuilder.Entity("IoTGateway.Model.RpcLog", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DeviceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Method")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Params")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RpcSide")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("RpcLogs");
+                });
+
             modelBuilder.Entity("IoTGateway.Model.SystemConfig", b =>
                 {
                     b.Property<Guid>("ID")
@@ -195,6 +242,9 @@ namespace IoTGateway.DataAccess.Migrations
 
                     b.Property<string>("GatewayName")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("IoTPlatformType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MqttIp")
                         .HasColumnType("TEXT");
@@ -736,6 +786,15 @@ namespace IoTGateway.DataAccess.Migrations
                 {
                     b.HasOne("IoTGateway.Model.Device", "Device")
                         .WithMany("DeviceVariables")
+                        .HasForeignKey("DeviceId");
+
+                    b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("IoTGateway.Model.RpcLog", b =>
+                {
+                    b.HasOne("IoTGateway.Model.Device", "Device")
+                        .WithMany()
                         .HasForeignKey("DeviceId");
 
                     b.Navigation("Device");

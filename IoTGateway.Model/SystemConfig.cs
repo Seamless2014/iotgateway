@@ -15,5 +15,26 @@ namespace IoTGateway.Model
         public string MqttUName { get; set; }
         [Display(Name = "Mqtt密码")]
         public string MqttUPwd { get; set; }
+        [Display(Name = "输出平台")]
+        public IoTPlatformType IoTPlatformType { get; set; }
+    }
+    public enum IoTPlatformType
+    {
+        [Display(Name = "ThingsBoard")]
+        ThingsBoard =0,
+        [Display(Name = "IoTSharp")]
+        IoTSharp =1,
+        [Display(Name = "阿里物联网平台")]
+        AliCloudIoT=2,
+        [Display(Name = "腾讯智能云")]
+        TencentIoTHub =3,
+        [Display(Name = "百度物联网通信")]
+        BaiduIoTCore =4,
+        [Display(Name = "中移OneNet")]
+        OneNET = 5,
+        [Display(Name = "ThingsCloud")]
+        ThingsCloud = 6,
+        [Display(Name = "IotDB")]
+        IotDB = 99
     }
 }

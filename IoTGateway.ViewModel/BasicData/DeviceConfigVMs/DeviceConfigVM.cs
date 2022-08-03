@@ -47,6 +47,10 @@ namespace IoTGateway.ViewModel.BasicData.DeviceConfigVMs
                     }
                 }
             }
+            else if (IoTBackgroundService.ConfigSelectDeviceId != null)
+            {
+                Entity.DeviceId = IoTBackgroundService.ConfigSelectDeviceId;
+            }
         }
 
         public override void DoAdd()
@@ -76,6 +80,12 @@ namespace IoTGateway.ViewModel.BasicData.DeviceConfigVMs
             var deviceService = Wtm.ServiceProvider.GetService(typeof(DeviceService)) as DeviceService;
             UpdateDevices.UpdateConfig(DC, deviceService, FC);
 
+        }
+
+        public override DuplicatedInfo<DeviceConfig> SetDuplicatedCheck()
+        {
+            var rv = CreateFieldsInfo(SimpleField(x => x.DeviceId), SimpleField(x => x.DeviceConfigName));
+            return rv;
         }
     }
 }

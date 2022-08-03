@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using MQTTnet.AspNetCore;
+using MQTTnet.AspNetCore.Extensions;
 using Plugin;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Core.Extensions;
@@ -30,7 +35,7 @@ namespace IoTGateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-            services.AddWtmSession(3600, ConfigRoot);
+            services.AddWtmSession(360000, ConfigRoot);
             services.AddWtmCrossDomain(ConfigRoot);
             services.AddWtmAuthentication(ConfigRoot);
             services.AddWtmHttpClient(ConfigRoot);
@@ -41,40 +46,73 @@ namespace IoTGateway
             {
                 options.UseWtmMvcOptions();
             })
-            .AddJsonOptions(options => {
+            .AddJsonOptions(options =>
+            {
                 options.UseWtmJsonOptions();
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+
             .ConfigureApiBehaviorOptions(options =>
             {
                 options.UseWtmApiOptions();
             })
             .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
             .AddWtmDataAnnotationsLocalization(typeof(Program));
-            
-            services.AddWtmContext(ConfigRoot, (options)=> {
+
+            services.AddWtmContext(ConfigRoot, (options) =>
+            {
                 options.DataPrivileges = DataPrivilegeSettings();
                 options.CsSelector = CSSelector;
                 options.FileSubDirSelector = SubDirSelector;
                 options.ReloadUserFunc = ReloadUser;
             });
+
+            //MQTTServer
+            services.AddHostedMqttServer(mqttServer =>
+            {
+                mqttServer.WithoutDefaultEndpoint();
+            })
+                .AddMqttConnectionHandler()
+                .AddConnections();
+
+
             services.AddHostedService<IoTBackgroundService>();
             services.AddSingleton<DeviceService>();
-            services.AddSingleton<DrvierService>();
+            services.AddSingleton<DriverService>();
+            services.AddSingleton<UAService>();
             services.AddSingleton<MyMqttClient>();
+            services.AddSingleton<ModbusSlaveService>();
+
         }
 
-        //public void ConfigureContainer(ContainerBuilder containerBuilder)
-        //{
-        //    containerBuilder.RegisterModule<ConfigureAutofac>();
-        //}
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IOptionsMonitor<Configs> configs, DeviceService deviceService)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<Configs> configs, DeviceService deviceService, ModbusSlaveService modbusSlaveService)
         {
             IconFontsHelper.GenerateIconFont();
 
+            var pvd = new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
+                RequestPath = new PathString(""),
+                //设置不限制content-type 该设置可以下载所有类型的文件，但是不建议这么设置，因为不安全
+                //下面设置可以下载apk和nupkg类型的文件
+                ContentTypeProvider = new FileExtensionContentTypeProvider(new Dictionary<string, string>
+                {
+                    { ".html", "text/html" },
+                    { ".glb", "model/gltf-binary" },
+                    { ".json", " application/json" },
+                    { ".js", "application/javascript" },
+                    { ".css", "text/css" },
+                    { ".wasm", "application/wasm" },
+                    { ".png", "image/png" },
+                    { ".jpg", "image/jpg" },
+                    { ".woff", "application/font-woff" },
+                    { ".woff2", "application/font-woff" },
+                    { ".ico", "image/x-icon" },
+                })
+            };
+
             app.UseExceptionHandler(configs.CurrentValue.ErrorHandler);
-            app.UseStaticFiles();
+            app.UseStaticFiles(pvd);
             app.UseWtmStaticFiles();
             app.UseRouting();
             app.UseWtmMultiLanguages();
@@ -87,6 +125,12 @@ namespace IoTGateway
 
             app.UseEndpoints(endpoints =>
             {
+                //MqttServerWebSocket
+                endpoints.MapConnectionHandler<MqttConnectionHandler>("/mqtt", options =>
+                {
+                    options.WebSockets.SubProtocolSelector = MqttSubProtocolSelector.SelectSubProtocol;
+                });
+
                 endpoints.MapControllerRoute(
                    name: "areaRoute",
                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
@@ -96,6 +140,8 @@ namespace IoTGateway
             });
 
             app.UseWtmContext();
+
+
         }
 
         /// <summary>

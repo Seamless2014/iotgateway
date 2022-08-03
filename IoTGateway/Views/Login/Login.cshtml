@@ -20,11 +20,11 @@
     <title>IoTGateway</title>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#verify_code_img').attr('src', '/_framework/GetVerifyCode?id=' + Math.random());
+            //$('#verify_code_img').attr('src', '/_framework/GetVerifyCode?id=' + Math.random());
             $("input[name='VerifyCode']").attr('autocomplete', 'off');
         });
         function verify() {
-            $('#verify_code_img').attr('src', '/_framework/GetVerifyCode?id=' + Math.random());
+            //$('#verify_code_img').attr('src', '/_framework/GetVerifyCode?id=' + Math.random());
         }
         layui.use('layer');
     </script>
@@ -37,6 +37,8 @@
     <div class="loginBody app-login-back-@bgnumber" style="flex: 1 1 auto !important; ">
         <header class="login-header">
             <img src="/images/logo.png" alt="" height="48">
+            <img src="/images/公众号.jpg" alt="" height="150">
+            <img src="/images/小程序.jpg" alt="" style="float:right" height="150">
         </header>
         <div class="login-content">
             <div class="login-form">
@@ -46,20 +48,20 @@
                     <ul class="loginForm">
                         <li>
                             <i><img src="~/images/icon-login04.png" /></i>
-                            <input type="text" name="ITCode" placeholder="@Model.Localizer["Login.InputUserName"]" class="login-input" autocomplete="off" value="@Model.ITCode">
+                            <input type="text" name="ITCode" placeholder="@Model.Localizer["Login.InputUserName"]" class="login-input" autocomplete="off" value="admin">
                         </li>
                         <li>
                             <i style="width: 16px;"><img src="~/images/icon-login01.png" /></i>
-                            <input type="password" name="Password" placeholder="@Model.Localizer["Login.InputPassword"]" class="login-input" value="@Model.Password">
+                            <input type="password" name="Password" placeholder="@Model.Localizer["Login.InputPassword"]" class="login-input" value="000000">
                         </li>
-                        <li>
+                        @*<li>
                             <i><img src="~/images/icon-login03.png" /></i>
                             <input type="text" name="VerifyCode" placeholder="@Model.Localizer["Login.InputValidation"]" class="login-input">
                             <p class="login-code">
                             </p>
                             <img class="login-codeImg" id="verify_code_img">
                             <i class="login-code"><img src="~/images/icon-login02.png" onclick="verify()" /></i>
-                        </li>
+                        </li>*@
                         <li style="text-align:right;vertical-align:text-top">
                             <input type="checkbox" name="RememberLogin" value="true" @(Model.RememberLogin ? "checked" : "")>
                             <span style="font-size:14px; margin-left:5px;">@Model.Localizer["Login.RememberMe"]</span>
@@ -68,6 +70,10 @@
                         <li>
                             <span class="login-error">@Model.MSD.GetFirstError()</span>
                             <button type="submit" class="login-button" style="cursor:pointer">@Model.Localizer["Login.Login"]</button>
+                            <div  class="login-button" style="cursor:pointer">
+                                <a href="http://iotgateway.net/" target="_blank">跳转教程文档，持续更新，收藏不迷路</a>
+                            </div>
+                            
                             @*<wt:linkbutton window-title="@Model.Localizer["Login.Register"]" class="login-button" style="cursor:pointer" target="ButtonTargetEnum.Layer" window-width="500" window-height="500" url="/Login/Reg" text="@Model.Localizer["Login.Register"]" />*@
                         </li>
                     </ul>

@@ -12,7 +12,7 @@ namespace IoTGateway.ViewModel.BasicData.DeviceVMs
     public class CopyVM : BaseVM
     {
         public string 设备名称 { get; set; }
-        public uint 复制数量 { get; set; } = 20;
+        public uint 复制数量 { get; set; } = 1;
         public string 复制结果 { get; set; }
 
         public void Copy()
@@ -21,7 +21,7 @@ namespace IoTGateway.ViewModel.BasicData.DeviceVMs
             {
                 try
                 {
-                    var device = DC.Set<Device>().Where(x => x.ID == Guid.Parse(FC["id"].ToString())).Include(x => x.Driver).FirstOrDefault();
+                    var device = DC.Set<Device>().Where(x => x.ID == Guid.Parse(FC["id"].ToString())).Include(x => x.Parent).Include(x => x.Driver).FirstOrDefault();
                     var devices = new List<Device>();
                     if (device == null)
                         复制结果 = "复制失败，找不到采集点";
@@ -38,13 +38,16 @@ namespace IoTGateway.ViewModel.BasicData.DeviceVMs
                                 ID = Guid.NewGuid(),
                                 DeviceName = $"{device.DeviceName}-Copy{i}",
                                 AutoStart = false,
+                                CgUpload = device.CgUpload,
+                                EnforcePeriod = device.EnforcePeriod,
                                 ParentId = device.ParentId,
                                 CreateBy = this.Wtm.LoginUserInfo.Name,
                                 CreateTime = DateTime.Now,
                                 Driver = device.Driver,
                                 DriverId = device.DriverId,
                                 Description = device.Description,
-                                DeviceTypeEnum = device.DeviceTypeEnum
+                                DeviceTypeEnum = device.DeviceTypeEnum,
+                                Parent= device.Parent
                             };
                             DC.Set<Device>().Add(newDevice);
                             devices.Add(newDevice);
@@ -74,7 +77,7 @@ namespace IoTGateway.ViewModel.BasicData.DeviceVMs
                                     DataType = deviceVariable.DataType,
                                     Method = deviceVariable.Method,
                                     ProtectType = deviceVariable.ProtectType,
-                                    ValueFactor = deviceVariable.ValueFactor,
+                                    Expressions = deviceVariable.Expressions,
                                     DeviceAddress = deviceVariable.DeviceAddress
                                 };
                                 DC.Set<DeviceVariable>().Add(newDeviceVariable);

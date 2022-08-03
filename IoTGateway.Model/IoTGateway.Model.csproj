@@ -1,18 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
  </PropertyGroup>
 
-
-  <ItemGroup>
-    <PackageReference Include="WalkingTec.Mvvm.Core" Version="5.7.0" />
-  </ItemGroup>
-
-
   <ItemGroup>
     <ProjectReference Include="..\Plugins\PluginInterface\PluginInterface.csproj" />
+    <ProjectReference Include="..\WalkingTec.Mvvm\WalkingTec.Mvvm.Core\WalkingTec.Mvvm.Core.csproj" />
   </ItemGroup>
 </Project>
 

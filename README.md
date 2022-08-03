@@ -1,41 +1,111 @@
-# iotgateway
-* 物联网网关mqtt输出，支持thingsboard
-* 抛砖引玉，共同进步
-* 可视化的配置方式实现数据采集(使用wtm开发)
-* 基于.net5的开源物联网网关
-* 内置ModbusTcp驱动(使用nmodbus4)
-* 支持驱动二次开发（短期内会提供西门子三菱通讯）
-* 数据通过mqtt推送，支持thingsboard
-* 目前只支持遥测数据上传，后续支持属性的双向通信
-# 运行
-## windows运行：
-1. [下载Releasev0.01](https://github.com/iioter/iotgateway/releases/download/v0.01/iotgateway-winx64-v0.01.zip)发布版本
-2. [下载.net5](https://dotnet.microsoft.com/en-us/download/dotnet/5.0) sdk或runtime
-3. 安装.net5 
-4. 解压release包，运行IoTGateway.exe
-5. 访问[iotgateway](http://localhost:518/)后台：http://localhost:518
-## docker运行
-1. docker push 15261671110/iotgateway
-2. docker run -d -p 518:518 --name iotgateway --restart always 15261671110/iotgateway
-## 登入系统
-1. 用户名 admin,密码 000000
-2. 打开发布文件路径下的ReadMe文件夹中的手摸手，按照顺序添加设备进行采集
-# 采集配置
-![1 登录](https://user-images.githubusercontent.com/29589505/145705166-d5818557-4ba1-4e7b-b8d8-8f5f4b28868f.png)
-![2 首页](https://user-images.githubusercontent.com/29589505/145705168-94b3ff0c-2f5c-4a31-8e83-c2ed799320ce.png)
-![3 网关配置](https://user-images.githubusercontent.com/29589505/145705172-2a10d11b-436d-4a2c-86bf-cf6aa5dade07.png)
-![4 设备维护](https://user-images.githubusercontent.com/29589505/145705173-7c9ccc0e-e1ab-49ba-af28-0e5c654a57e3.png)
-![5 设备参数配置](https://user-images.githubusercontent.com/29589505/145705174-95a14642-dd30-4e73-803d-5f998f297842.png)
-![6 设备变量配置](https://user-images.githubusercontent.com/29589505/145705175-fb11013f-55f8-4123-b770-aaf41706a7aa.png)
-![7 设备变量配置-新建](https://user-images.githubusercontent.com/29589505/145705178-52c7580f-1793-4c9a-935b-658d21946aa1.png)
-# thingsboard接入教程
-![0 准备一个modsim 或者modbus tcp设备](https://user-images.githubusercontent.com/29589505/145705255-18e8d649-6a08-4dc7-96b3-6bdf8fc23cb4.png)
-![1 thingsboard  新建网关](https://user-images.githubusercontent.com/29589505/145705256-1e01030f-2ccb-464e-a3cc-784d5a7c1c91.png)
-![2 gateway 修改网关传输配置](https://user-images.githubusercontent.com/29589505/145705260-3f9f36c9-c163-4853-9787-677926989af3.png)
-![3 gateway 创建组](https://user-images.githubusercontent.com/29589505/145705261-c605c825-d463-491d-ad32-1a3c245e2ee3.png)
-![4 gateway 创建设备](https://user-images.githubusercontent.com/29589505/145705263-d3ea2a6b-7ea3-491a-bcd1-20e8dc770922.png)
-![5 gateway 配置设备参数](https://user-images.githubusercontent.com/29589505/145705264-6db386ba-e68e-4a7f-acff-44f55ce25e73.png)
-![6 gateway 新建变量](https://user-images.githubusercontent.com/29589505/145705265-44a0da5d-6d16-4463-a755-626d93dc121c.png)
-![6 gateway 修改设备为自启动](https://user-images.githubusercontent.com/29589505/145705269-c816789c-cd67-4c01-973f-ae4f10eb41d9.png)
-![7 thingsboard 查看到设备和数据](https://user-images.githubusercontent.com/29589505/145705270-31d8884f-7f6f-4ff5-a6bb-1d57a97012f4.png)
-![8 gateway 查看到数据](https://user-images.githubusercontent.com/29589505/145705271-cb80b80e-006e-4312-8843-6d0ae9457cb1.png)
+# IoTGateway
+
+## [教程文档:http://iotgateway.net](http://iotgateway.net/)
+## [在线体验:http://online.iotgateway.net](http://online.iotgateway.net/)
+
+## [配套硬件产品:http://iotgateway.net/docs/hardware/selection](http://iotgateway.net/docs/hardware/selection/)
+
+## [淘宝店地址:https://iotgateway.taobao.com](https://iotgateway.taobao.com/)
+
+
+> 基于.NET6的跨平台物联网网关
+> 
+> B/S架构，可视化配置
+> 
+> 南向连接到你的任何设备和系统(如PLC、扫码枪、CNC、数据库、串口设备、上位机、OPC Server、OPC UA Server、Mqtt Server等)
+> 
+> 北向连接Thingsboard、IoTSharp、ThingsCloud、IoTDB或您自己的物联网平台进行双向数据通讯
+> 
+> 当然也可以进行边缘计算
+>
+## 交流
+
+| 公众号:工业物联网网关 |    [QQ群:712105424](https://qm.qq.com/cgi-bin/qm/qr?k=e3Y8biyVdhDxx3LPbjvNY3TSNOEAmjp7&jump_from=webapi)  |
+| ------ | ---- |
+| ![wx](./images/wx.jpg) | ![qq](./images/qq.png) |
+
+## 重磅推出硬件网关
+
+受益于.netcore**跨平台**能力，此项目并**不限于**下面推荐的硬件设备，你可以在任何主机上运行，但是会针对特定硬件设备做**优化适配**，如
+
+\- **性能监控**：cpu、内存、磁盘等主机指标监控
+
+\- **硬件交互**：模拟量采集、继电器控制等
+
+### 为何推荐
+
+如果你购买了硬件网关：
+
+- **间接为开源项目做贡献**，收益的一部分会投入到开源项目建设中去，包括但不限于云服务器资源租赁、先上线向下活动等
+- 可以**免费使用**后续"企业版网关项目(筹)"
+- 可以**免费使用**网络透传等服务
+- 提供详细的**教程文档**，包括**Linux系统**、**dotnet跨平台等**
+- 可用于**学习、评估、和生产环境**使用
+
+### 产品列表
+
+- 下列型号均有"**蓝牙BLE 5.0**、**Wi-Fi**"
+- 搭载**Linux**操作系统```debian.11```
+- 时间关系，目前只整理了 [A080](http://iotgateway.net/docs/hardware/A080/introduction) 、[B100](http://iotgateway.net/docs/hardware/B100/introduction)型号的资料，其他用法差不多，后续会更新
+- 9月后会推出**24v**版本
+- 淘宝店是:[https://iotgateway.taobao.com/](https://iotgateway.taobao.com/)
+
+| 型号                                                         | 触摸屏   | USB  | 网口          | 通讯口            | SD扩展 | 4G   | 电源  | RTC  | 典型价格                                                     | 其他接口                                          |
+| ------------------------------------------------------------ | -------- | ---- | ------------- | ----------------- | ------ | ---- | ----- | ---- | ------------------------------------------------------------ | ------------------------------------------------- |
+| D070                                                         | 无       | 4    | 千兆×1        | 无                | 无     | 无   | 5V    | 无   | 900                                                          |                                                   |
+| [A080](http://iotgateway.net/docs/hardware/A080/introduction) | 无       | 2    | 千兆×1        | 232×1;485×4;can×1 | 有     | 可选 | 12V   | 有   | [1200](https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-13769403149.4.67fb40c29fW8sO&id=679535257919) | 蜂鸣器x1                                          |
+| [B100](http://iotgateway.net/docs/hardware/B100/introduction) | 无       | 2    | 百兆×1;千兆×1 | 232×1;485×1       | **无** | 可选 | 12V   | 有   | [1350](https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-13769403149.2.487440c2LpWLE0&id=679174732349) | ADCx3;DIx2;DIOx1;单刀双置继电器x1;按键x1;蜂鸣器x1 |
+| C210                                                         | 10寸电容 | 2    | 千兆×1        | 232×4;485×2       | 有     | 可选 | 6~36V | 有   | 3050                                                         |                                                   |
+
+## 运行
+
+- [直接运行:http://iotgateway.net/docs/iotgateway/run/release-run](http://iotgateway.net/docs/iotgateway/run/release-run)
+- [Docker运行:http://iotgateway.net/docs/iotgateway/run/docker-run](http://iotgateway.net/docs/iotgateway/run/docker-run)
+- [源码运行:http://iotgateway.net/docs/iotgateway/run/build-run](http://iotgateway.net/docs/iotgateway/run/build-run)
+
+## 南向
+- 支持**三菱PLC**、**Modbus**驱动全协议支持、**欧姆龙PLC**、**OPCUA**客户端、**西门子PLC**、**ABPLC**、**MT机床**、**Fanuc CNC**
+- 驱动支持二次开发
+- [驱动简介](http://iotgateway.net/docs/iotgateway/driver/drvier)
+- [驱动二次开发实战之TcpClient](http://iotgateway.net/docs/iotgateway/driver/tcpclient)
+- 支持设备数据写入
+  ![set-variabl](./images/set-variable.png)  
+- 支持计算表达式  
+  ![express](./images/express.png)
+- 支持变化上传和定时归档
+  ![change-uploa](./images/change-upload.png)
+  
+
+## 北向
+- thingsboard、iotsharp、thingscloud、IoTDB第三方平台
+- 遥测、属性上传
+- RPC反向控制
+  ![rpc](./images/rpc.gif)
+
+## 服务
+- 内置Mqtt服务(1888,1888/mqtt),支持websocker-mqtt，直连你的MES、SCADA等
+  ![mqtt](./images/mqtt.png)
+- 内置OpcUA(opc.tcp://localhost:62541/Quickstarts/ReferenceServer)，你的设备也可以通过OPCUA和其他设备通信
+  ![opcua](./images/opcua.png)
+- 内置ModbusSlave(模拟设备)，端口503
+
+## 展示
+- Websocker免刷新
+![variables](./images/variables.gif)
+
+- 3D数字孪生Demo
+  ![3d](./images/3d.gif)
+  
+- 支持接入web组态项目
+![scada](./images/scada.gif)
+![scada-config](./images/scada-config.png)
+
+## 免责声明
+- ## 生产环境使用请做好评估
+- ## 项目中OPCUA相关功能仅用作学习及测试
+- ## 如使用OPCUA协议请联系OPC基金会进行授权，产生一切纠纷与本项目无关
+
+## 打赏请留微信或QQ
+|  微信 | 支付宝 |
+| ----- | ---- |
+| ![wx-pay](./images/wx-pay.jpg) | ![ali-pay](./images/ali-pay.png) |
