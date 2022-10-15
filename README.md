@@ -20,9 +20,9 @@
 >
 ## 交流
 
-| 公众号:工业物联网网关 |    [QQ群:712105424](https://qm.qq.com/cgi-bin/qm/qr?k=e3Y8biyVdhDxx3LPbjvNY3TSNOEAmjp7&jump_from=webapi)  |
-| ------ | ---- |
-| ![wx](./images/wx.jpg) | ![qq](./images/qq.png) |
+| 公众号:工业物联网网关 |    [QQ群:895199932](https://jq.qq.com/?_wv=1027&k=mus0CV0W)  | 微信群 |
+| ------ | ---- | ---- |
+| ![wx](./images/wx.jpg) | ![qq](./images/qq.png) | ![qq](./images/wxgroup.png) |
 
 ## 重磅推出硬件网关
 
@@ -105,7 +105,15 @@
 - ## 项目中OPCUA相关功能仅用作学习及测试
 - ## 如使用OPCUA协议请联系OPC基金会进行授权，产生一切纠纷与本项目无关
 
+## 友情链接
+### IoTClient
+开源地址：
+https://github.com/zhaopeiym/IoTClient
+概述：
+这是一个基于.NET Standard 2.0物联网设备通讯协议实现客户端，包括主流PLC、Bacnet等。
+
 ## 打赏请留微信或QQ
+
 |  微信 | 支付宝 |
 | ----- | ---- |
 | ![wx-pay](./images/wx-pay.jpg) | ![ali-pay](./images/ali-pay.png) |
