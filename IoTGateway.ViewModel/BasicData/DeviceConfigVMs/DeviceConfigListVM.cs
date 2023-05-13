@@ -20,7 +20,7 @@ namespace IoTGateway.ViewModel.BasicData.DeviceConfigVMs
             {
                 this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.Create, Localizer["Sys.Create"],"BasicData", dialogWidth: 800),
                 this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.Edit, Localizer["Sys.Edit"], "BasicData", dialogWidth: 800),
-                //this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.Delete, Localizer["Sys.Delete"], "BasicData", dialogWidth: 800),
+                this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.Delete, Localizer["Sys.Delete"], "BasicData", dialogWidth: 800),
                 this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.Details, Localizer["Sys.Details"], "BasicData", dialogWidth: 800),
                 this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.BatchEdit, Localizer["Sys.BatchEdit"], "BasicData", dialogWidth: 800),
                 //this.MakeStandardAction("DeviceConfig", GridActionStandardTypesEnum.BatchDelete, Localizer["Sys.BatchDelete"], "BasicData", dialogWidth: 800),
@@ -58,7 +58,7 @@ namespace IoTGateway.ViewModel.BasicData.DeviceConfigVMs
             return new List<GridColumn<DeviceConfig_View>>{
                 this.MakeGridHeader(x => x.DeviceConfigName).SetWidth(100),
                 this.MakeGridHeader(x => x.DataSide).SetWidth(100),
-                this.MakeGridHeader(x => x.Description).SetWidth(100),
+                this.MakeGridHeader(x => x.Description).SetWidth(120),
                 this.MakeGridHeader(x => x.Value).SetWidth(100),
                 this.MakeGridHeader(x => x.DeviceName_view).SetWidth(100),
                 this.MakeGridHeader(x => x.EnumInfo),

@@ -125,6 +125,9 @@ namespace IoTGateway.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Alias")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("DataType")
                         .HasColumnType("INTEGER");
 
@@ -137,10 +140,16 @@ namespace IoTGateway.DataAccess.Migrations
                     b.Property<Guid?>("DeviceId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("EndianType")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Expressions")
                         .HasColumnType("TEXT");
 
                     b.Property<uint>("Index")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsUpload")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Method")
